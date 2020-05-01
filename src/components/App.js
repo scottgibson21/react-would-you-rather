@@ -1,25 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadAuthedUser } from '../actions/shared'
+import { handleInitialData } from '../actions/shared'
+import Login from './Login'
 
 class App extends Component {
 
     componentDidMount() {
-        this.props.dispatch(loadAuthedUser())
+        this.props.dispatch(handleInitialData())
     }
 
     render() {
         return (
-            <div>
-                The Main App, the authed user is: {`${this.props.authedUser}`}
-            </div>
+            <Login />
         )
     }
 }
 
-function mapStateToProps({ authedUser }) {
+function mapStateToProps(state) {
     return {
-        authedUser
+        users: state.users
     }
 }
 
