@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { setAuthedUser } from '../actions/authedUser'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -39,9 +40,18 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    loading: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        height: 400
+    },
 }));
 
 function Login(props) {
+
+    console.log('the props', props)
 
     const classes = useStyles();
     const [input, setInput] = useState('')
@@ -65,6 +75,14 @@ function Login(props) {
         }
 
         props.dispatch(setAuthedUser(input))
+    }
+
+    if (props.loading === true) {
+        return (
+            <div className={classes.loading}>
+                <CircularProgress />
+            </div>
+        )
     }
 
     return (
@@ -120,7 +138,8 @@ function Login(props) {
 function mapStateToProps({ users }) {
     console.log('the current users in map state to props: ', users)
     return {
-        users: users
+        users: users,
+        loading: Object.keys(users).length === 0 ? true : false
     }
 }
 
