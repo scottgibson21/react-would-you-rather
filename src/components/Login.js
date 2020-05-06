@@ -4,12 +4,12 @@ import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import { setAuthedUser } from '../actions/authedUser'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 120,
     },
     selectEmpty: {
-        flexGrow: 1,
+        margin: theme.spacing(0, 0, 0),
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -30,8 +30,11 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
+        display: 'flex',
+        flexDirection: 'column',
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
+        justifyContent: 'center'
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
@@ -51,6 +54,19 @@ function Login(props) {
         console.log('The new state is: ', e.target.value)
     }
 
+    const handleSubmit = (event) => {
+
+        event.preventDefault()
+
+        console.log("handle submit called!, userId is: ", input)
+
+        if (input === '') {
+            return;
+        }
+
+        props.dispatch(setAuthedUser(input))
+    }
+
     return (
         <div>
             <Container component="main" maxWidth="xs">
@@ -64,7 +80,6 @@ function Login(props) {
                     </Typography>
                     <form className={classes.form} noValidate>
                         <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel htmlFor="outlined-age-native-simple">User</InputLabel>
                             <Select
                                 native
                                 value={input}
@@ -76,9 +91,9 @@ function Login(props) {
                                 }}
                                 className={classes.selectEmpty}
                             >
-                                <option aria-label="None" value="" disabled></option>
+                                <option aria-label="None" value="" disabled>Select</option>
                                 {userIds.map((userId) => (
-                                    <option value={userId}>{users[userId].name}</option>
+                                    <option key={userId} value={userId}>{users[userId].name}</option>
                                 ))}
                             </Select>
                         </FormControl>
@@ -88,6 +103,7 @@ function Login(props) {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={handleSubmit}
                         >
                             Sign In
                         </Button>
