@@ -128,9 +128,6 @@ function Login(props) {
                     </form>
                 </div>
             </Container>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-                <span>{`The selected user in state is: ${input}`}</span>
-            </div>
         </div>
     )
 }
