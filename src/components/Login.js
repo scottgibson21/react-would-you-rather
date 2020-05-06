@@ -1,30 +1,110 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import { Button } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 
-class Login extends Component {
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    selectEmpty: {
+        flexGrow: 1,
+    },
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
 
-    render() {
-        const { userIds } = this.props
-        console.log('users from the login app', userIds)
-        console.log('props from the login app', this.props)
-        return (
-            <div>
-                <h3>Options User Ids</h3>
-                <ol>
-                    {userIds.map((userId) => (
-                        <li key={userId}>
-                            {userId}
-                        </li>
-                    ))}
-                </ol>
-            </div>
-        )
+function Login(props) {
+
+    const classes = useStyles();
+    const [input, setInput] = useState('')
+    const users = props.users ? props.users : {}
+    console.log(users)
+    const userIds = users ? Object.keys(users) : []
+
+    const handleChange = (e) => {
+        setInput(e.target.value)
+        console.log('The new state is: ', e.target.value)
     }
+
+    return (
+        <div>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <form className={classes.form} noValidate>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel htmlFor="outlined-age-native-simple">User</InputLabel>
+                            <Select
+                                native
+                                value={input}
+                                onChange={handleChange}
+                                label="Age"
+                                inputProps={{
+                                    name: 'age',
+                                    id: 'outlined-age-native-simple',
+                                }}
+                                className={classes.selectEmpty}
+                            >
+                                <option aria-label="None" value="" disabled></option>
+                                {userIds.map((userId) => (
+                                    <option value={userId}>{users[userId].name}</option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Sign In
+                        </Button>
+                    </form>
+                </div>
+            </Container>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <span>{`The selected user in state is: ${input}`}</span>
+            </div>
+        </div>
+    )
 }
 
 function mapStateToProps({ users }) {
+    console.log('the current users in map state to props: ', users)
     return {
-        userIds: Object.keys(users)
+        users: users
     }
 }
 
